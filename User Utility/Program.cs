@@ -52,6 +52,7 @@ static void CreateAndPrintUserArray()
 
 static void CreateAndPrintUserList()
 {
+    InsertUsers(CreateUsersList());
     PrintUsers(CreateUsersList());
 }
 
