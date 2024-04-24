@@ -7,7 +7,7 @@ namespace UserContext
     {
         public DbSet<User> Users { get; set; }
         public DbSet<Post> Posts { get; set; }
-0
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Post>()
