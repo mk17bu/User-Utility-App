@@ -19,10 +19,10 @@ while (true)
             CreatePosts();
             break;
         case "3":
-            
+            DisplayAllUsers();
             break;
         case "4":
-
+            DisplayAllPosts();
             break;
         case "5":
             Console.WriteLine("Exiting the program...");
@@ -86,5 +86,21 @@ void CreatePosts()
     context.SaveChanges();
 
     Console.WriteLine("Posts created \n");
+    ReadLineAndClear();
+}
+
+void DisplayAllUsers()
+{
+    var users = context.Users.ToList();
+    users.ForEach(user => Console.WriteLine($"User ID: {user.Id}\nFirst Name: {user.FirstName}\nLast Name: {user.LastName}\nRole: {user.Role}\n"));
+
+    ReadLineAndClear();
+}
+
+void DisplayAllPosts()
+{
+    var posts = context.Posts.ToList();
+    posts.ForEach(post => Console.WriteLine($"Post ID: {post.Id}\nTitle: {post.Title}\nDescription: {post.Description}\nPosting Date: {post.PostingDate}\nAuthor: {post.Author.FirstName} {post.Author.LastName}\n"));
+
     ReadLineAndClear();
 }
