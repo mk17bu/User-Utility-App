@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using UserContext;
+﻿using UserContext;
 using UserData;
 
 Context context = new Context();
@@ -26,10 +25,10 @@ while (true)
 
             break;
         case "5":
-            Console.WriteLine("You entered four. Exiting the program...");
+            Console.WriteLine("Exiting the program...");
             return;
         default:
-            Console.WriteLine("Invalid input. Please enter a number between 1 and 3, or type '4' to quit.");
+            Console.WriteLine("Invalid input. Please enter a number between 1 and 3, or type '5' to exit.");
             break;
     }
 }
@@ -48,6 +47,7 @@ static void DisplayMenu()
 
 static void ReadLineAndClear()
 {
+    Console.WriteLine("Press ENTER to continue");
     Console.ReadLine();
     Console.Clear();
 }
