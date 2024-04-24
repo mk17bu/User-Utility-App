@@ -7,6 +7,17 @@ namespace UserContext
     {
         public DbSet<User> Users { get; set; }
         public DbSet<Post> Posts { get; set; }
+0
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Post>()
+                .Property(p => p.Title)
+                .HasMaxLength(100);
+
+            modelBuilder.Entity<Post>()
+                .Property(p => p.Description)
+                .HasMaxLength(1000);
+        }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
