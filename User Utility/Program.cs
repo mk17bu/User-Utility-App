@@ -131,4 +131,5 @@ static void InsertUsers<T>(IEnumerable<T> users) where T : User
 {
     Context context = new Context();
     context.Users.AddRange(users);
+    context.SaveChanges();
 }
