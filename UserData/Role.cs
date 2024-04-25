@@ -2,6 +2,6 @@
 {
     public enum Role
     {
-        Cashier, Dishwasher, Barista, Server, Chef
+        Admin, Moderator, Editor, Contributor, Subscriber
     }
 }

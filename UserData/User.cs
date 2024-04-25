@@ -1,6 +1,4 @@
-﻿using System.Data;
-
-namespace UserData
+﻿namespace UserData
 {
     public class User
     {

@@ -1,11 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
-using UserContext;
+﻿using UserContext;
 using UserData;
 
-using (Context context = new Context())
-{
-    context.Database.EnsureCreated();
-}
+Context context = new Context();
+context.Database.EnsureCreated();
 
 while (true)
 {
@@ -16,19 +13,22 @@ while (true)
     switch (input)
     {
         case "1":
-            CreateAndPrintUserArray();
+            CreateUsers();
             break;
         case "2":
-            CreateAndPrintUserList();
+            CreatePosts();
             break;
         case "3":
-            CreateAndPrintUserDictionary();
+            DisplayAllUsers();
             break;
         case "4":
-            Console.WriteLine("You entered four. Exiting the program...");
+            DisplayAllPosts();
+            break;
+        case "5":
+            Console.WriteLine("Exiting the program...");
             return;
         default:
-            Console.WriteLine("Invalid input. Please enter a number between 1 and 3, or type '4' to quit.");
+            Console.WriteLine("Invalid input. Please enter a number between 1 and 3, or type '5' to exit.");
             break;
     }
 }
@@ -37,99 +37,70 @@ static void DisplayMenu()
 {
     Console.Out.WriteLine("Welcome to the Data Collection Tool!" +
                           "\n\nPlease choose an option:" +
-                          "\n1. Create a list of users" +
-                          "\n2. Create an array" +
-                          "\n3. Create a dictionary" +
-                          "\n4. Exit" +
-                          "\n\nEnter the corresponding number for your choice (1/2/3/4):");
+                          "\n1. Create users" +
+                          "\n2. Create posts" +
+                          "\n3. Show users" +
+                          "\n4. Show posts" +
+                          "\n5. Exit" +
+                          "\n\nEnter the corresponding number for your choice (1/2/3/4/5):");
 }
 
-static void CreateAndPrintUserArray()
+static void ReadLineAndClear()
 {
-    InsertUsers(CreateUsersArray());
-    PrintUsers(CreateUsersArray());
-}
-
-static void CreateAndPrintUserList()
-{
-    InsertUsers(CreateUsersList());
-    PrintUsers(CreateUsersList());
-}
-
-static void CreateAndPrintUserDictionary()
-{
-    PrintUsersDictionary(CreateUsersDictionary());
-}
-
-static User[] CreateUsersArray()
-{
-    User[] usersArray = new User[5];
-
-    usersArray[0] = new User { Id = 01, FirstName = "Emily", LastName = "Johnson", Role = Role.Barista };
-    usersArray[1] = new User { Id = 02, FirstName = "Benjamin", LastName = "Smith", Role = Role.Dishwasher };
-    usersArray[2] = new User { Id = 03, FirstName = "Olivia", LastName = "Williams", Role = Role.Cashier };
-    usersArray[3] = new User { Id = 04, FirstName = "Ethan", LastName = "Brown", Role = Role.Chef };
-    usersArray[4] = new User { Id = 05, FirstName = "Ava", LastName = "Davis", Role = Role.Server };
-
-    Console.WriteLine("Users created \n");
-    return usersArray;
-}
-
-static List<User> CreateUsersList()
-{
-    List<User> usersList = new List<User>
-    {
-                new User { Id = 05, FirstName = "William", LastName = "Turner", Role = Role.Barista },
-                new User { Id = 06, FirstName = "Emma", LastName = "Thompson ", Role = Role.Dishwasher },
-                new User{Id = 07, FirstName = "Lucas", LastName = "Harris", Role = Role.Cashier},
-                new User{Id = 08, FirstName = "Chloe", LastName = "White", Role = Role.Chef},
-                new User{Id = 09, FirstName = "Jacob", LastName = "Martin", Role = Role.Server}
-            };
-
-    Console.WriteLine("Users created \n");
-    return usersList;
-}
-
-static Dictionary<string, User> CreateUsersDictionary()
-{
-    Dictionary<string, User> usersDictionary = new Dictionary<string, User>
-    {
-                { "01", new User { Id = 10, FirstName = "Sophia", LastName = "Robinson", Role = Role.Barista } },
-                { "02", new User { Id = 11, FirstName = "Daniel", LastName = "Clarke", Role = Role.Dishwasher } },
-                { "03", new User{Id = 12, FirstName = "Lily", LastName = "Taylor", Role = Role.Cashier} },
-                { "04", new User{Id = 13, FirstName = "Noah", LastName = "Hall", Role = Role.Chef} },
-                { "05", new User{Id = 14, FirstName = "Mia", LastName = "Mitchell", Role = Role.Server} }
-            };
-
-    Console.WriteLine("Users created \n");
-    return usersDictionary;
-}
-
-static void PrintUsers<T>(IEnumerable<T> collection) where T : User
-{
-    foreach (var user in collection)
-    {
-        Console.WriteLine($"ID: {user.Id}, Name: {user.FirstName} {user.LastName}, Role: {user.Role}");
-    }
-
+    Console.WriteLine("Press ENTER to continue");
     Console.ReadLine();
     Console.Clear();
 }
 
-static void PrintUsersDictionary(Dictionary<string, User> userDictionary)
+void CreateUsers()
 {
-    foreach (var kvp in userDictionary)
+    var userList = new List<User>
     {
-        Console.WriteLine($"Key: {kvp.Key}, ID: {kvp.Value.Id}, Name: {kvp.Value.FirstName} {kvp.Value.LastName}, Role: {kvp.Value.Role}");
-    }
+        new User { FirstName = "William", LastName = "Turner", Role = Role.Admin },
+        new User { FirstName = "Emma", LastName = "Thompson ", Role = Role.Moderator },
+        new User { FirstName = "Lucas", LastName = "Harris", Role = Role.Editor},
+        new User { FirstName = "Chloe", LastName = "White", Role = Role.Contributor},
+        new User { FirstName = "Jacob", LastName = "Martin", Role = Role.Subscriber}
+    };
 
-    Console.ReadLine();
-    Console.Clear();
-}
-
-static void InsertUsers<T>(IEnumerable<T> users) where T : User
-{
-    Context context = new Context();
-    context.Users.AddRange(users);
+    context.Users.AddRange(userList);
     context.SaveChanges();
+
+    Console.WriteLine("Users created \n");
+    ReadLineAndClear();
+}
+
+void CreatePosts()
+{
+    var userList = context.Users.ToList();
+    var postList = new List<Post>
+    {
+        new Post { Title = "De Jong out for season, back for Euros", Description = "Frenkie de Jong will miss the last six games of Barcelona's season after sustaining another ankle injury in Sunday's 3-2 Clásico defeat against Real Madrid", PostingDate = new DateTime(2024, 4, 22), Author = userList[0]},
+        new Post { Title = "Pochettino on Chelsea thrashing: 'We gave up'", Description = "Mauricio Pochettino admitted Chelsea gave up in Tuesday's 5-0 thrashing at Arsenal, but sought to defend his players by insisting some of the game's greats had similar off days", PostingDate = new DateTime(2024, 4, 23), Author = userList[0]},
+        new Post { Title = "Leverkusen's unbeaten run reaches 45 games", Description = "Bayer Leverkusen's Josip Stanisic scored a stoppage-time goal for the champions to rescue a 1-1 Bundesliga draw at Borussia Dortmund", PostingDate = new DateTime(2024, 4, 21), Author = userList[1]},
+        new Post { Title = "Verstappen eases to China win, Norris second ahead of Perez", Description = "Max Verstappen overcame two different Safety Car periods to record another easy win at the Chinese Grand Prix", PostingDate = new DateTime(2024, 4, 21), Author = userList[2]},
+        new Post { Title = "LeBron sounds off on officiating, walks out of news conference", Description = "LeBron James complains about the officiating in Lakers vs. Nuggets and even mentions the 76ers-Knicks game", PostingDate = new DateTime(2024, 4, 23), Author = userList[3]}
+    };
+
+    context.Posts.AddRange(postList);
+    context.SaveChanges();
+
+    Console.WriteLine("Posts created \n");
+    ReadLineAndClear();
+}
+
+void DisplayAllUsers()
+{
+    var users = context.Users.ToList();
+    users.ForEach(user => Console.WriteLine($"User ID: {user.Id}\nFirst Name: {user.FirstName}\nLast Name: {user.LastName}\nRole: {user.Role}\n"));
+
+    ReadLineAndClear();
+}
+
+void DisplayAllPosts()
+{
+    var posts = context.Posts.ToList();
+    posts.ForEach(post => Console.WriteLine($"Post ID: {post.Id}\nTitle: {post.Title}\nDescription: {post.Description}\nPosting Date: {post.PostingDate}\nAuthor: {post.Author.FirstName} {post.Author.LastName}\n"));
+
+    ReadLineAndClear();
 }
